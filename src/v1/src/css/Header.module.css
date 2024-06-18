@@ -41,10 +41,26 @@
     color: #333;
     display: flex;
     align-items: center;
+    position: relative;
+    overflow: hidden;
+    /* Ensure the underline animates neatly */
+    transition: color 0.3s ease;
+    /* Optional: Smooth color transition */
 }
 
-.atag:hover {
-    color: #333;
+.atag::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: 0;
+    left: 0;
+    background-color: #333;
+    transition: width 0.3s ease;
+}
+
+.atag:hover::before {
+    width: 100%;
 }
 
 .register_icon {
