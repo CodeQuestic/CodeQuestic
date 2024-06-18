@@ -41,7 +41,7 @@ function Header() {
           </li>
           <li className={HeaderCSS.list}>
             <a
-              href="https://discord.com"
+              href="https://discord.gg/33VBS64Ju5"
               target="_blank"
               rel="noopener noreferrer"
               className={HeaderCSS.atag}
