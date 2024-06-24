@@ -13,7 +13,7 @@ function HeroSection() {
           rel="noopener noreferrer"
           className={HeroSectionCSS.buttonLink}
         >
-          <button>Join Us</button>
+          <button className={HeroSectionCSS.btn}>Join Us</button>
         </a>
       </div>
       <div className={HeroSectionCSS.heroImage}>

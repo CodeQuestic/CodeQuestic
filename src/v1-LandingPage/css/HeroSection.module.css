@@ -49,6 +49,11 @@
     text-decoration: none;
 }
 
+.btn {
+    font-weight: 500;
+    color: black;
+}
+
 /* Media query for mobile devices */
 @media (max-width: 768px) {
     .heroContainer {

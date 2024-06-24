@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import HeaderCSS from "../css/Header.module.css";
-import { FaBars, FaTimes } from "react-icons/fa";
+import { Slant as Hamburger } from "hamburger-react";
 
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -18,8 +18,8 @@ function Header() {
             CodeQuestic
           </Link>
         </div>
-        <div className={HeaderCSS.menuIcon} onClick={toggleMenu}>
-          {menuOpen ? <FaTimes /> : <FaBars />}
+        <div className={HeaderCSS.menuIcon}>
+          <Hamburger toggled={menuOpen} toggle={toggleMenu} />
         </div>
         <ul
           className={`${HeaderCSS.ulist} ${menuOpen ? HeaderCSS.menuOpen : ""}`}

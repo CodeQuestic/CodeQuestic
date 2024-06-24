@@ -10,7 +10,10 @@ function LandingPage() {
       <HeroSection />
       <h2
         style={{
-          padding: "20px",
+          height: "100%",
+          width: "auto",
+          backgroundColor: "#333",
+          padding: "50px",
           textAlign: "center",
           color: "white",
           fontWeight: "500",

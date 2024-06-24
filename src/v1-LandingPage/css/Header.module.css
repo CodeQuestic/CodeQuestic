@@ -43,9 +43,7 @@
     align-items: center;
     position: relative;
     overflow: hidden;
-    /* Ensure the underline animates neatly */
     transition: color 0.3s ease;
-    /* Optional: Smooth color transition */
 }
 
 .atag::before {
