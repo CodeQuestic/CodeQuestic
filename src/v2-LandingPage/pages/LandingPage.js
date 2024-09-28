@@ -88,7 +88,7 @@ export default function LandingPage() {
           >
             <h3 className="text-2xl font-semibold mb-4">{projects[currentProject].name}</h3>
             <p className="text-lg mb-6">{projects[currentProject].description}</p>
-            <a href="#" className="text-[#ff6138] font-semibold hover:underline inline-flex items-center">
+            <a href="https://github.com/CodeQuestic/ResearchGenie" className="text-[#ff6138] font-semibold hover:underline inline-flex items-center">
               Learn More <ChevronRight size={20} className="ml-1" />
             </a>
           </motion.div>
@@ -213,7 +213,13 @@ function GrowingNumber({ value, label }) {
           setDisplayValue(Math.floor(current))
         }
       }, duration / steps)
-      return () => clearInterval(timer)
+  
+      const currentRef = ref.current
+      return () => {
+        if (currentRef) {
+          clearInterval(timer)
+        }
+      }
     }
   }, [isInView, value])
 
@@ -236,13 +242,15 @@ function useInView(ref, options) {
       options
     )
 
-    if (ref.current) {
-      observer.observe(ref.current)
+    const currentRef = ref.current
+
+    if (currentRef) {
+      observer.observe(currentRef)
     }
 
     return () => {
-      if (ref.current) {
-        observer.unobserve(ref.current)
+      if (currentRef) {
+        observer.unobserve(currentRef)
       }
     }
   }, [ref, options])
