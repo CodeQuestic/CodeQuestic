@@ -16,8 +16,8 @@ export default function LandingPage() {
   ]
 
   const teamMembers = [
-    { name: 'Rakshith', role: 'Lead Developer', image: 'https://avatars.githubusercontent.com/u/83587918?s=96&v=4', github: 'https://github.com/rakshixh', twitter: '', linkedin: 'https://www.linkedin.com/in/rakshixh/' },
-    { name: 'Saurabh', role: 'Member', image: 'https://avatars.githubusercontent.com/u/61317144?s=96&v=4', github: 'https://github.com/0xSaurabhx', twitter: 'https://x.com/saurabh_udupi', linkedin: 'https://www.linkedin.com/in/dev-saurabh/' },
+    { name: 'Rakshith', role: 'Lead Developer', image: 'https://avatars.githubusercontent.com/u/83587918?v=4', github: 'https://github.com/rakshixh', twitter: '', linkedin: 'https://www.linkedin.com/in/rakshixh/' },
+    { name: 'Saurabh', role: 'Member', image: 'https://avatars.githubusercontent.com/u/61317144?v=4', github: 'https://github.com/0xSaurabhx', twitter: 'https://x.com/saurabh_udupi', linkedin: 'https://www.linkedin.com/in/dev-saurabh/' },
     { name: 'Member 3', role: 'Member', image: '/placeholder.svg?height=200&width=200' },
     { name: 'Member 4', role: 'Member', image: '/placeholder.svg?height=200&width=200' },
   ]
