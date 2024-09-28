@@ -46,30 +46,30 @@ export default function Header() {
           >
             Innovate | Iterate | Inspire
           </motion.div>
-          <div className="flex space-x-4">
-            <motion.a
-              href="https://github.com/CodeQuestic"
-              target="_blank"
-              rel="noopener noreferrer"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-white text-[#ff6138] px-8 py-3 rounded-full font-semibold text-lg shadow-lg hover:bg-gray-100 transition duration-300 flex items-center"
-            >
-              <Github size={24} className="mr-2" />
-              Join Us
-            </motion.a>
-            <motion.a
-              href="https://discord.gg/33VBS64Ju5"
-              target="_blank"
-              rel="noopener noreferrer"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-white text-[#7289da] px-8 py-3 rounded-full font-semibold text-lg shadow-lg hover:bg-gray-100 transition duration-300 flex items-center"
-            >
-              <MessageSquareCode size={24} className="mr-2" />
-              Join Discord
-            </motion.a>
-          </div>
+          <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
+  <motion.a
+    href="https://github.com/CodeQuestic"
+    target="_blank"
+    rel="noopener noreferrer"
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    className="bg-white text-[#ff6138] px-8 py-3 rounded-full font-semibold text-lg md:text-lg shadow-lg hover:bg-gray-100 transition duration-300 flex items-center justify-center w-full md:w-auto"
+  >
+    <Github size={24} className="mr-2" />
+    Join Us
+  </motion.a>
+  <motion.a
+    href="https://discord.gg/33VBS64Ju5"
+    target="_blank"
+    rel="noopener noreferrer"
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    className="bg-white text-[#7289da] px-8 py-3 rounded-full font-semibold text-lg md:text-lg shadow-lg hover:bg-gray-100 transition duration-300 flex items-center justify-center w-full md:w-auto"
+  >
+    <MessageSquareCode size={24} className="mr-2" />
+    Join Discord
+  </motion.a>
+</div>
         </motion.div>
       </div>
     </header>
