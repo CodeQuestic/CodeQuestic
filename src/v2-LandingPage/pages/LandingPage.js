@@ -1,6 +1,5 @@
-'use client'
-
 import React, { useState, useEffect, useRef } from 'react'
+import axios from 'axios'
 import { motion, useAnimation } from 'framer-motion'
 import { Github, Users, Heart, ChevronRight, Linkedin, Twitter } from 'lucide-react'
 import Header from '../components/Header'
@@ -8,18 +7,13 @@ import Footer from '../components/Footer'
 
 export default function LandingPage() {
   const [currentProject, setCurrentProject] = useState(0)
+  const [contributions, setContributions] = useState([])
+  const [repositories, setRepositories] = useState([])
   const controls = useAnimation()
-
-  const projects = [
-    { name: 'Research Genie', description: 'AI Powered Assistant Made for Researchers' },
-    { name: 'OpenPrep', description: 'Comprehensive collection of resources for various programming languages. It includes tutorials, code samples, best practices, and reference materials to help developers of all levels enhance their skills and knowledge in multiple languages...' },
-  ]
 
   const teamMembers = [
     { name: 'Rakshith', role: 'Lead Developer', image: 'https://avatars.githubusercontent.com/u/83587918?v=4', github: 'https://github.com/rakshixh', twitter: '', linkedin: 'https://www.linkedin.com/in/rakshixh/' },
     { name: 'Saurabh', role: 'Member', image: 'https://avatars.githubusercontent.com/u/61317144?v=4', github: 'https://github.com/0xSaurabhx', twitter: 'https://x.com/saurabh_udupi', linkedin: 'https://www.linkedin.com/in/dev-saurabh/' },
-    { name: 'Member 3', role: 'Member', image: '/placeholder.svg?height=200&width=200' },
-    { name: 'Member 4', role: 'Member', image: '/placeholder.svg?height=200&width=200' },
   ]
 
   const stats = [
@@ -31,10 +25,10 @@ export default function LandingPage() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentProject((prev) => (prev + 1) % projects.length)
+      setCurrentProject((prev) => (prev + 1) % repositories.length)
     }, 5000)
     return () => clearInterval(interval)
-  }, [projects.length])
+  }, [repositories.length])
 
   useEffect(() => {
     controls.start({
@@ -44,6 +38,34 @@ export default function LandingPage() {
     })
   }, [currentProject, controls])
 
+  useEffect(() => {
+    async function fetchContributions() {
+      try {
+        const response = await axios.get('https://api.github.com/orgs/CodeQuestic/events')
+        setContributions(response.data)
+      } catch (error) {
+        console.error('Error fetching contributions:', error)
+      }
+    }
+
+    async function fetchRepositories() {
+      try {
+        const response = await axios.get('https://api.github.com/orgs/CodeQuestic/repos')
+        const filteredRepos = response.data.filter(repo => repo.name !== '.github')
+        setRepositories(filteredRepos)
+      } catch (error) {
+        console.error('Error fetching repositories:', error)
+      }
+    }
+
+    fetchContributions()
+    fetchRepositories()
+  }, [])
+
+  const truncateDescription = (description, maxLength) => {
+    if (!description) return ''
+    return description.length > maxLength ? `${description.substring(0, maxLength)}...` : description
+  }
 
   return (
     <div className="min-h-screen bg-gray-100 text-gray-900">
@@ -81,17 +103,19 @@ export default function LandingPage() {
       <section className="py-20 bg-gray-200">
         <div className="container mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Featured Projects</h2>
-          <motion.div
-            key={currentProject}
-            animate={controls}
-            className="bg-white rounded-lg shadow-lg p-8 max-w-2xl mx-auto"
-          >
-            <h3 className="text-2xl font-semibold mb-4">{projects[currentProject].name}</h3>
-            <p className="text-lg mb-6">{projects[currentProject].description}</p>
-            <a href="https://github.com/CodeQuestic/ResearchGenie" className="text-[#ff6138] font-semibold hover:underline inline-flex items-center">
-              Learn More <ChevronRight size={20} className="ml-1" />
-            </a>
-          </motion.div>
+          {repositories.length > 0 && (
+            <motion.div
+              key={currentProject}
+              animate={controls}
+              className="bg-white rounded-lg shadow-lg p-8 max-w-2xl mx-auto"
+            >
+              <h3 className="text-2xl font-semibold mb-4">{repositories[currentProject].name}</h3>
+              <p className="text-lg mb-6">{truncateDescription(repositories[currentProject].description, 30)}</p>
+              <a href={repositories[currentProject].html_url} className="text-[#ff6138] font-semibold hover:underline inline-flex items-center">
+                Learn More <ChevronRight size={20} className="ml-1" />
+              </a>
+            </motion.div>
+          )}
         </div>
       </section>
 
@@ -125,7 +149,7 @@ export default function LandingPage() {
       <section className="py-20">
         <div className="container mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Meet Our Team</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 justify-center">
+          <div className={`flex flex-wrap justify-center gap-8 ${teamMembers.length === 2 ? 'md:justify-center' : ''}`}>
             {teamMembers.map((member, index) => (
               <motion.div
                 key={index}
@@ -159,11 +183,7 @@ export default function LandingPage() {
         <div className="container mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">Latest Contributions</h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              { user: 'alice', project: 'OpenAI Wrapper', description: 'Added support for new GPT-4 model' },
-              { user: 'bob', project: 'React Component Library', description: 'Created a new DatePicker component' },
-              { user: 'charlie', project: 'Python Data Structures', description: 'Implemented Red-Black Tree' },
-            ].map((contribution, index) => (
+            {contributions.slice(0, 6).map((contribution, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -173,14 +193,14 @@ export default function LandingPage() {
               >
                 <div className="flex items-center mb-4">
                   <div className="w-10 h-10 bg-gradient-to-r from-[#ff6138] to-[#ff9d7e] rounded-full flex items-center justify-center text-white font-semibold mr-4">
-                    {contribution.user[0].toUpperCase()}
+                    {contribution.actor.login[0].toUpperCase()}
                   </div>
                   <div>
-                    <h3 className="font-semibold">{contribution.user}</h3>
-                    <p className="text-sm text-gray-600">{contribution.project}</p>
+                    <h3 className="font-semibold">{contribution.actor.login}</h3>
+                    <p className="text-sm text-gray-600">{contribution.repo.name}</p>
                   </div>
                 </div>
-                <p className="text-gray-700">{contribution.description}</p>
+                <p className="text-gray-700">{contribution.payload.commits ? contribution.payload.commits[0].message : 'No commit message'}</p>
               </motion.div>
             ))}
           </div>
@@ -213,7 +233,7 @@ function GrowingNumber({ value, label }) {
           setDisplayValue(Math.floor(current))
         }
       }, duration / steps)
-  
+
       const currentRef = ref.current
       return () => {
         if (currentRef) {
