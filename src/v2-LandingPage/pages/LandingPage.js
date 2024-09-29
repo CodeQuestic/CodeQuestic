@@ -9,18 +9,17 @@ export default function LandingPage() {
   const [currentProject, setCurrentProject] = useState(0)
   const [contributions, setContributions] = useState([])
   const [repositories, setRepositories] = useState([])
+  const [stats, setStats] = useState([
+    { value: 0, label: 'Open Source Contributors' },
+    { value: 0, label: 'Projects' },
+    { value: 0, label: 'Contributions' },
+    { value: 0, label: 'Stars' },
+  ])
   const controls = useAnimation()
 
   const teamMembers = [
     { name: 'Rakshith', role: 'Lead Developer', image: 'https://avatars.githubusercontent.com/u/83587918?v=4', github: 'https://github.com/rakshixh', twitter: '', linkedin: 'https://www.linkedin.com/in/rakshixh/' },
     { name: 'Saurabh', role: 'Member', image: 'https://avatars.githubusercontent.com/u/61317144?v=4', github: 'https://github.com/0xSaurabhx', twitter: 'https://x.com/saurabh_udupi', linkedin: 'https://www.linkedin.com/in/dev-saurabh/' },
-  ]
-
-  const stats = [
-    { value: 2, label: 'Open Source Contributors' },
-    { value: 2, label: 'Projects' },
-    { value: 50, label: 'Users' },
-    { value: 0, label: 'Stars' },
   ]
 
   useEffect(() => {
@@ -40,8 +39,12 @@ export default function LandingPage() {
 
   useEffect(() => {
     async function fetchContributions() {
+      const headers = {
+        authorization: `Bearer ${process.env.REACT_APP_GITHUB_TOKEN}`,
+        'X-GitHub-Api-Version': '2022-11-28'
+      }
       try {
-        const response = await axios.get('https://api.github.com/orgs/CodeQuestic/events')
+        const response = await axios.get('https://api.github.com/orgs/CodeQuestic/events', { headers })
         setContributions(response.data)
       } catch (error) {
         console.error('Error fetching contributions:', error)
@@ -49,8 +52,12 @@ export default function LandingPage() {
     }
 
     async function fetchRepositories() {
+      const headers = {
+        authorization: `Bearer ${process.env.REACT_APP_GITHUB_TOKEN}`,
+        'X-GitHub-Api-Version': '2022-11-28'
+      }
       try {
-        const response = await axios.get('https://api.github.com/orgs/CodeQuestic/repos')
+        const response = await axios.get('https://api.github.com/orgs/CodeQuestic/repos', { headers })
         const filteredRepos = response.data.filter(repo => repo.name !== '.github')
         setRepositories(filteredRepos)
       } catch (error) {
@@ -58,8 +65,37 @@ export default function LandingPage() {
       }
     }
 
+    async function fetchStats() {
+      const headers = {
+        authorization: `Bearer ${process.env.REACT_APP_GITHUB_TOKEN}`,
+        'X-GitHub-Api-Version': '2022-11-28'
+      }
+      try {
+        const [contributorsResponse, reposResponse, eventsResponse] = await Promise.all([
+          axios.get('https://api.github.com/orgs/CodeQuestic/members', { headers }),
+          axios.get('https://api.github.com/orgs/CodeQuestic/repos', { headers }),
+          axios.get('https://api.github.com/orgs/CodeQuestic/events', { headers })
+        ])
+
+        const contributors = contributorsResponse.data.length
+        const projects = reposResponse.data.length
+        const contributions = eventsResponse.data.length
+        const stars = reposResponse.data.reduce((acc, repo) => acc + repo.stargazers_count, 0)
+
+        setStats([
+          { value: contributors, label: 'Open Source Contributors' },
+          { value: projects, label: 'Projects' },
+          { value: contributions, label: 'Contributions' },
+          { value: stars, label: 'Stars' },
+        ])
+      } catch (error) {
+        console.error('Error fetching stats:', error)
+      }
+    }
+
     fetchContributions()
     fetchRepositories()
+    fetchStats()
   }, [])
 
   const truncateDescription = (description, maxLength) => {
@@ -107,7 +143,7 @@ export default function LandingPage() {
             <motion.div
               key={currentProject}
               animate={controls}
-              className="bg-white rounded-lg shadow-lg p-8 max-w-2xl mx-auto"
+              className="bg-white rounded-lg shadow-lg p-8 max-w-2xl mx-auto h-52 overflow-hidden"
             >
               <h3 className="text-2xl font-semibold mb-4">{repositories[currentProject].name}</h3>
               <p className="text-lg mb-6">{truncateDescription(repositories[currentProject].description, 30)}</p>
