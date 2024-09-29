@@ -20,7 +20,7 @@ export default function LandingPage() {
     { value: 2, label: 'Open Source Contributors' },
     { value: 2, label: 'Projects' },
     { value: 50, label: 'Users' },
-    { value: 0, label: 'Downloads' },
+    { value: 0, label: 'Stars' },
   ]
 
   useEffect(() => {
