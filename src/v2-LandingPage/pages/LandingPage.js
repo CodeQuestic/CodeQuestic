@@ -44,7 +44,7 @@ export default function LandingPage() {
         'X-GitHub-Api-Version': '2022-11-28'
       }
       try {
-        const response = await axios.get('https://api.github.com/orgs/CodeQuestic/events', { headers })
+        const response = await axios.get('https://api.github.com/orgs/CodeQuestic/events?per_page=1000', { headers })
         setContributions(response.data)
       } catch (error) {
         console.error('Error fetching contributions:', error)
